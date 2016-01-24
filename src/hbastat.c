@@ -92,11 +92,11 @@ Return value:
     }
 
 //10.4.3    HBA Reset
-  //If the HBA becomes unusable for multiple ports, and a software reset or port reset does not correct the problem, software may reset the entire HBA by setting GHC.HR to ??  When software sets the GHC.HR bit to ?? the HBA shall perform an internal reset action.
+  //If the HBA becomes unusable for multiple ports, and a software reset or port reset does not correct the problem, software may reset the entire HBA by setting GHC.HR to '1'.  When software sets the GHC.HR bit to '1', the HBA shall perform an internal reset action.
     ghc.HR = 1;
     StorPortWriteRegisterUlong(AdapterExtension, &abar->GHC.AsUlong, ghc.AsUlong);
 
-  //The bit shall be cleared to ??by the HBA when the reset is complete.  A software write of ??to GHC.HR shall have no effect.  To perform the HBA reset, software sets GHC.HR to ??and may poll until this bit is read to be ?? at which point software knows that the HBA reset has completed.
+  //The bit shall be cleared to '0' by the HBA when the reset is complete.  A software write of '0' to GHC.HR shall have no effect.  To perform the HBA reset, software sets GHC.HR to '1' and may poll until this bit is read to be '0', at which point software knows that the HBA reset has completed.
     ghc.AsUlong = StorPortReadRegisterUlong(AdapterExtension, &abar->GHC.AsUlong);
     //5.2.2.1    H:Init
     //5.2.2.2    H:WaitForAhciEnable
@@ -105,13 +105,13 @@ Return value:
         ghc.AsUlong = StorPortReadRegisterUlong(AdapterExtension, &abar->GHC.AsUlong);
     }
 
-    //If the HBA has not cleared GHC.HR to ??within 1 second of software setting GHC.HR to ?? the HBA is in a hung or locked state.
+    //If the HBA has not cleared GHC.HR to '0' within 1 second of software setting GHC.HR to '1', the HBA is in a hung or locked state.
     if(i == 50) {
         AdapterExtension->ErrorFlags = (1 << 29);
         return FALSE;
     }
 
-    //When GHC.HR is set to ?? GHC.AE, GHC.IE, the IS register, and all port register fields (except PxFB/PxFBU/PxCLB/PxCLBU) that are not HwInit in the HBA’s register memory space are reset.  The HBA’s configuration space and all other global registers/bits are not affected by setting GHC.HR to ??  Any HwInit bits in the port specific registers are not affected by setting GHC.HR to ??  The port specific registers PxFB, PxFBU, PxCLB, and PxCLBU are not affected by setting GHC.HR to ??  If the HBA supports staggered spin-up, the PxCMD.SUD bit will be reset to ?? software is responsible for setting the PxCMD.SUD and PxSCTL.DET fields appropriately such that communication can be established on the Serial ATA link.  If the HBA does not support staggered spin-up, the HBA reset shall cause a COMRESET to be sent on the port
+    //When GHC.HR is set to '1', GHC.AE, GHC.IE, the IS register, and all port register fields (except PxFB/PxFBU/PxCLB/PxCLBU) that are not HwInit in the HBA¡¯s register memory space are reset.  The HBA¡¯s configuration space and all other global registers/bits are not affected by setting GHC.HR to '1'.  Any HwInit bits in the port specific registers are not affected by setting GHC.HR to '1'.  The port specific registers PxFB, PxFBU, PxCLB, and PxCLBU are not affected by setting GHC.HR to '1'.  If the HBA supports staggered spin-up, the PxCMD.SUD bit will be reset to '0'; software is responsible for setting the PxCMD.SUD and PxSCTL.DET fields appropriately such that communication can be established on the Serial ATA link.  If the HBA does not support staggered spin-up, the HBA reset shall cause a COMRESET to be sent on the port
 
     return TRUE;
 }
@@ -124,10 +124,10 @@ AhciCOMRESET(
     )
 /*
 PHY Reset:COMRESET
-    SCTL.DET Controls the HBA’s device detection and interface initialization.
+    SCTL.DET Controls the HBA¡¯s device detection and interface initialization.
     DET=1 Performs interface communication initialization sequence to establish communication. This is functionally equivalent to a hard reset and results in the interface being reset and communications reinitialized.  While this field is 1h, COMRESET is transmitted on the interface.
     Software should leave the DET field set to 1h for a minimum of 1 millisecond to ensure that a COMRESET is sent on the interface.
-    since we are in 5.3.2.3    P:NotRunning and PxCMD.SUD = ??does this still take us to P:StartComm?
+    since we are in 5.3.2.3    P:NotRunning and PxCMD.SUD = '0' does this still take us to P:StartComm?
 Called By:
     AhciPortReset,AhciNonQueuedErrorRecovery,P_Running_WaitWhileDET1,AhciHwControlIdeStart
 It assumes:
@@ -191,7 +191,7 @@ Return Values:
     StorPortWriteRegisterUlong(ChannelExtension->AdapterExtension, &Px->SCTL.AsUlong, sctl.AsUlong);
 
   //2.2 Wait for DET to be set
-    // AHCI 10.4.2 After clearing PxSCTL.DET to 0h, software should wait for communication to be re-established as indicated by bit 0 of PxSSTS.DET being set to ??
+    // AHCI 10.4.2 After clearing PxSCTL.DET to 0h, software should wait for communication to be re-established as indicated by bit 0 of PxSSTS.DET being set to '1'.
     // typically, it will be done in 10ms. max wait 30ms to be safe
     StorPortStallExecution(50);
     ssts.AsUlong = StorPortReadRegisterUlong(ChannelExtension->AdapterExtension, &Px->SSTS.AsUlong);
@@ -279,8 +279,8 @@ Return value:
   //1.1 Clear CMD.ST
     cmd.AsUlong = StorPortReadRegisterUlong(adapterExtension, &Px->CMD.AsUlong);
     //AHCI 10.3.2 on FRE it says:
-    //Software shall not clear this [FRE] bit while PxCMD.ST remains set to ??"
-    //System software places a port into the idle state by clearing PxCMD.ST and waiting for PxCMD.CR to return ??when read.
+    //Software shall not clear this [FRE] bit while PxCMD.ST remains set to '1'."
+    //System software places a port into the idle state by clearing PxCMD.ST and waiting for PxCMD.CR to return '0' when read.
     cmd.ST = 0;
     StorPortWriteRegisterUlong(adapterExtension, &Px->CMD.AsUlong, cmd.AsUlong);
 
@@ -304,7 +304,7 @@ Return value:
 
         tfd.AsUlong = StorPortReadRegisterUlong(adapterExtension, &ChannelExtension->Px->TFD.AsUlong);
         if (tfd.STS.BSY) {
-          // AHCI 3.3.7 Command List Override (CLO):  Setting this bit to ??causes PxTFD.STS.BSY and PxTFD.STS.DRQ to be cleared to ??
+          // AHCI 3.3.7 Command List Override (CLO):  Setting this bit to '1' causes PxTFD.STS.BSY and PxTFD.STS.DRQ to be cleared to '0'.
           // This allows a software reset to be transmitted to the device regardless of whether the BSY and DRQ bits are still set in the PxTFD.STS register.
 
           // Do this to make sure the port can stop
@@ -323,9 +323,9 @@ Return value:
         StorPortStallExecution(5000);  //5 milliseconds
     }
 
-    //AHCI 10.4.2 If PxCMD.CR or PxCMD.FR do not clear to ??correctly, then software may attempt a port reset or a full HBA reset to recover.
+    //AHCI 10.4.2 If PxCMD.CR or PxCMD.FR do not clear to '0' correctly, then software may attempt a port reset or a full HBA reset to recover.
     if (i == 101) {
-        RecordExecutionHistory(ChannelExtension, 0x10350011); // P_NotRunning, PxCMD.CR or PxCMD.FR do not clear to ??correctly
+        RecordExecutionHistory(ChannelExtension, 0x10350011); // P_NotRunning, PxCMD.CR or PxCMD.FR do not clear to '0' correctly
         return FALSE;
     }
 
@@ -339,17 +339,17 @@ Return value:
         StorPortStallExecution(50);  //50 microseconds
     }
 
-    //If CI does not clear to ??correctly abort the stop
+    //If CI does not clear to '0' correctly abort the stop
     if (i == 101) {
-        RecordExecutionHistory(ChannelExtension, 0x10360011); // P_NotRunning, CI does not clear to ??
+        RecordExecutionHistory(ChannelExtension, 0x10360011); // P_NotRunning, CI does not clear to '0'
         return FALSE;
     }
 
   //2.1 Clear CMD.FRE
     cmd.AsUlong = StorPortReadRegisterUlong(adapterExtension, &Px->CMD.AsUlong);
     if( (cmd.FRE | cmd.FR) != 0 ) {
-        //If PxCMD.FRE is set to ?? software should clear it to ??and wait at least 500 milliseconds for PxCMD.FR to return ??when read.
-        //AHCI 10.3.2 Software shall not clear this bit while PxCMD.ST or PxCMD.CR is set to ??
+        //If PxCMD.FRE is set to '1', software should clear it to '0' and wait at least 500 milliseconds for PxCMD.FR to return '0' when read.
+        //AHCI 10.3.2 Software shall not clear this bit while PxCMD.ST or PxCMD.CR is set to '1'.
         cmd.FRE = 0;
         StorPortWriteRegisterUlong(adapterExtension, &Px->CMD.AsUlong, cmd.AsUlong);
 
@@ -371,18 +371,18 @@ Return value:
             StorPortStallExecution(5000);    //  5 milliseconds
         }
 
-        if ( i == 101 ) {  //If PxCMD.CR or PxCMD.FR do not clear to ??correctly, then software may attempt a port reset or a full HBA reset to recover.
+        if ( i == 101 ) {  //If PxCMD.CR or PxCMD.FR do not clear to '0' correctly, then software may attempt a port reset or a full HBA reset to recover.
             if (supportsCLO) {
-                RecordExecutionHistory(ChannelExtension, 0x10380011); // P_NotRunning, PxCMD.CR or PxCMD.FR do not clear to ?? CLO enabled
+                RecordExecutionHistory(ChannelExtension, 0x10380011); // P_NotRunning, PxCMD.CR or PxCMD.FR do not clear to '0', CLO enabled
             } else {
-                RecordExecutionHistory(ChannelExtension, 0x10370011); // P_NotRunning, PxCMD.CR or PxCMD.FR do not clear to ?? CLO not enabled
+                RecordExecutionHistory(ChannelExtension, 0x10370011); // P_NotRunning, PxCMD.CR or PxCMD.FR do not clear to '0', CLO not enabled
             }
             return FALSE;
         }
     }
 
   //2.2 wait for CLO to clear
-    // AHCI 3.3.7 Software must wait for CLO to be cleared to ??before setting PxCMD.ST to ??
+    // AHCI 3.3.7 Software must wait for CLO to be cleared to '0' before setting PxCMD.ST to '1'.
     // register bit CLO might be set in this function, and it should have been cleared before function exit.
     if ( supportsCLO && (cmd.CLO == 0) ) {
         for (i = 1; i < 101; i++) {
@@ -394,7 +394,7 @@ Return value:
         }
 
         if ( i == 101 ) {
-            RecordExecutionHistory(ChannelExtension, 0x10390011); // P_NotRunning, PxCMD.CLO not clear to ?? CLO enabled
+            RecordExecutionHistory(ChannelExtension, 0x10390011); // P_NotRunning, PxCMD.CLO not clear to '0', CLO enabled
             return FALSE;
         }
     }
@@ -587,7 +587,7 @@ It performs:
     1.2 Next, is the port somehow already running?
     1.3 Make sure the device knows it is supposed to be spun up
     1.4 Check to make sure that FR and CR are both 0.  Attempt to bring the controller into a consistent state by stopping the controller.
-    1.5 CMD.ST has to be set, when that happens check to see that PxSSTS.DET is not ?h?
+    1.5 CMD.ST has to be set, when that happens check to see that PxSSTS.DET is not '4h'
 
     2.1 Dispatch to the current state (states are responsible for selecting the next state)
 
@@ -661,7 +661,7 @@ Return Values:
         }
     }
 
-  //1.5 CMD.ST has to be set, when that happens check to see that PxSSTS.DET is not ?h?
+  //1.5 CMD.ST has to be set, when that happens check to see that PxSSTS.DET is not '4h'
     ssts.AsUlong = StorPortReadRegisterUlong(adapterExtension, &px->SSTS.AsUlong);
     if( ssts.DET == 0x4) {
         P_Running_StartFailed(ChannelExtension, TimerCallbackProcess);
@@ -1316,11 +1316,11 @@ AHCI 1.1 Section 6.2.2.1
 "The flow for system software to recover from an error when non-queued commands are issued is as follows:
     Reads PxCI to see which commands are still outstanding
     Reads PxCMD.CCS to determine the slot that the HBA was processing when the error occurred
-    Clears PxCMD.ST to ??to reset the PxCI register, waits for PxCMD.CR to clear to ??
+    Clears PxCMD.ST to '0' to reset the PxCI register, waits for PxCMD.CR to clear to '0'
     Clears any error bits in PxSERR to enable capturing new errors.
     Clears status bits in PxIS as appropriate
-    If PxTFD.STS.BSY or PxTFD.STS.DRQ is set to ?? issue a COMRESET to the device to put it in an idle state
-    Sets PxCMD.ST to ??to enable issuing new commands
+    If PxTFD.STS.BSY or PxTFD.STS.DRQ is set to '1', issue a COMRESET to the device to put it in an idle state
+    Sets PxCMD.ST to '1' to enable issuing new commands
 
 It assumes:
     Called asynchronously
@@ -1339,10 +1339,10 @@ It performs:
     1.1 Initialize
     1.2 Reads PxCI to see which commands are still outstanding
     1.3 Reads PxCMD.CCS to determine the slot that the HBA was processing when the error occurred
-    1.4.1 Clears PxCMD.ST to ??to reset the PxCI register, waits for PxCMD.CR to clear to ??
+    1.4.1 Clears PxCMD.ST to '0' to reset the PxCI register, waits for PxCMD.CR to clear to '0'
      1.5 Clears any error bits in PxSERR to enable capturing new errors.
      1.6 Clears status bits in PxIS as appropriate
-    1.4.2 If PxTFD.STS.BSY or PxTFD.STS.DRQ is set to ?? issue a COMRESET to the device to put it in an idle state
+    1.4.2 If PxTFD.STS.BSY or PxTFD.STS.DRQ is set to '1', issue a COMRESET to the device to put it in an idle state
     1.4.3 If a COMRESET was issued, restore Preserved Settings
     1.4.4 Start the channel
 
@@ -1379,7 +1379,7 @@ Affected Variables/Registers:
   //1.3 Reads PxCMD.CCS to determine the slot that the HBA was processing when the error occurred
     cmd.AsUlong = StorPortReadRegisterUlong(ChannelExtension->AdapterExtension, &ChannelExtension->Px->CMD.AsUlong);
 
-  //1.4 Clears PxCMD.ST to ??to reset the PxCI register, waits for PxCMD.CR to clear to ??
+  //1.4 Clears PxCMD.ST to '0' to reset the PxCI register, waits for PxCMD.CR to clear to '0'
     if ( !P_NotRunning(ChannelExtension, ChannelExtension->Px) ){ //This clears PxCI
         RecordExecutionHistory(ChannelExtension, 0x10160013);//AhciNonQueuedErrorRecovery, Port Stop Failed
         AhciPortReset(ChannelExtension, FALSE);
@@ -1469,7 +1469,7 @@ Affected Variables/Registers:
     //1.6 Clears status bits in PxIS as appropriate
         //Handled in the Interrupt routine
 
-    //1.4.2 If PxTFD.STS.BSY or PxTFD.STS.DRQ is set to ?? issue a COMRESET to the device to put it in an idle state
+    //1.4.2 If PxTFD.STS.BSY or PxTFD.STS.DRQ is set to '1', issue a COMRESET to the device to put it in an idle state
     tfd.AsUlong = StorPortReadRegisterUlong(ChannelExtension->AdapterExtension, &ChannelExtension->Px->TFD.AsUlong);
 
     if(tfd.STS.BSY || tfd.STS.DRQ) {
@@ -1675,13 +1675,13 @@ AHCI 1.1 Section 6.2.2.2 Native Command Queuing Error Recovery
     The flow for system software to recover from an error when native command queuing commands are
     issued is as follows:
 
-    ?Reads PxSACT to see which commands have not yet completed
-    ?Clears PxCMD.ST to ??to reset the PxCI and PxSACT registers, waits for PxCMD.CR to clear to ??
-    ?Clears any error bits in PxSERR to enable capturing new errors.
-    ?Clears status bits in PxIS as appropriate
-    ?If PxTFD.STS.BSY or PxTFD.STS.DRQ is set to ?? issue a COMRESET to the device to put it in an idle state
-    ?Sets PxCMD.ST to ??to enable issuing new commands
-    ?Issue READ LOG EXT to determine the cause of the error condition if software did not have to perform a reset (COMRESET or software reset) as part of the error recovery
+    - Reads PxSACT to see which commands have not yet completed
+    - Clears PxCMD.ST to '0' to reset the PxCI and PxSACT registers, waits for PxCMD.CR to clear to '0'
+    - Clears any error bits in PxSERR to enable capturing new errors.
+    - Clears status bits in PxIS as appropriate
+    - If PxTFD.STS.BSY or PxTFD.STS.DRQ is set to '1', issue a COMRESET to the device to put it in an idle state
+    - Sets PxCMD.ST to '1' to enable issuing new commands
+    - Issue READ LOG EXT to determine the cause of the error condition if software did not have to perform a reset (COMRESET or software reset) as part of the error recovery
 
     Software then either completes commands that did not finish with error to higher level software, or reissues
     them to the device.
@@ -1722,7 +1722,7 @@ Called by:
 #endif
 
     //
-    // Clears PxCMD.ST to ?? waits for PxCMD.CR to clear to ??
+    // Clears PxCMD.ST to '0', waits for PxCMD.CR to clear to '0'
     // If it doesn't succeed, issue COMRESET to recover.
     //
     if ( !P_NotRunning(ChannelExtension, ChannelExtension->Px) ) {
@@ -1741,7 +1741,7 @@ Called by:
 
     if (needCOMRESET == FALSE) {
         //
-        // If PxTFD.STS.BSY or PxTFD.STS.DRQ is set to ?? issue a COMRESET to the device to put it in an idle state
+        // If PxTFD.STS.BSY or PxTFD.STS.DRQ is set to '1', issue a COMRESET to the device to put it in an idle state
         // ChannelExtension->TaskFileData has been read from register in ISR.
         //
         if ((ChannelExtension->TaskFileData.STS.BSY != 0) || (ChannelExtension->TaskFileData.STS.DRQ != 0)) {
@@ -1943,7 +1943,7 @@ Return Values:
     P_NotRunning(ChannelExtension, ChannelExtension->Px);
 
   //2.2 Perform the COMRESET
-    // AHCI 10.1.2 - 3: If PxCMD.CR or PxCMD.FR do not clear to ??correctly, then software may attempt a port reset or a full HBA reset to recover.
+    // AHCI 10.1.2 - 3: If PxCMD.CR or PxCMD.FR do not clear to '0' correctly, then software may attempt a port reset or a full HBA reset to recover.
     AhciCOMRESET(ChannelExtension, ChannelExtension->Px);
 
     //

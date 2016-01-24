@@ -19,7 +19,7 @@ Revision History:
 
 #pragma warning(push)
 #pragma warning(disable:26015) //26015: "Potential overflow using expression 'outParams->DriverStatus.bDriverError'. Buffer access is apparently unbounded by the buffer size.
-                               //Output buffer cannot be checked for size.  ATAport provides this validation check as the input buffer size and output buffer size are 2 of the 4 parameters passed in on the SMART IRP.  Storport doesn’t do this and the miniport doesn’t get the IRP so it cannot do this for itself.  This is just the condition of a legacy IOCTL.
+                               //Output buffer cannot be checked for size.  ATAport provides this validation check as the input buffer size and output buffer size are 2 of the 4 parameters passed in on the SMART IRP.  Storport doesn't do this and the miniport doesn't get the IRP so it cannot do this for itself.  This is just the condition of a legacy IOCTL.
                                 //26015: "Potential overflow using expression 'nRB->NRBStatus' Buffer access is apparently unbounded by the buffer size.
                                 //The same is true for the NVCache IOCTL.  Instead of the output buffer, this time it is the NVCache_Request_Block.
 #pragma warning(disable:4214) // bit field types other than int
@@ -79,13 +79,13 @@ It performs:
     3.1 Enable the AHCI interface
         AHCI 1.1 Section 10.1.2 - 5.
         "For each implemented port, system software shall allocate memory for and program:
-            ?   PxCLB and PxCLBU (if CAP.S64A is set to ??
-            ?   PxFB and PxFBU (if CAP.S64A is set to ??
-            It is good practice for system software to ‘zero-out?the memory allocated and referenced by PxCLB and PxFB.  After setting PxFB and PxFBU to the physical address of the FIS receive area, system software shall set PxCMD.FRE to ??"
+            -    PxCLB and PxCLBU (if CAP.S64A is set to '1')
+            -    PxFB and PxFBU (if CAP.S64A is set to '1')
+            It is good practice for system software to 'zero-out' the memory allocated and referenced by PxCLB and PxFB.  After setting PxFB and PxFBU to the physical address of the FIS receive area, system software shall set PxCMD.FRE to '1'."
     3.2 Enable Interrupts on the Channel
         AHCI 1.1 Section 10.1.2 - 7.
-        "Determine which events should cause an interrupt, and set each implemented port’s PxIE register with the appropriate enables."
-        Note: Due to the multi-tiered nature of the AHCI HBA’s interrupt architecture, system software must always ensure that the PxIS (clear this first) and IS.IPS (clear this second) registers are cleared to ??before programming the PxIE and GHC.IE registers. This will prevent any residual bits set in these registers from causing an interrupt to be asserted.
+        "Determine which events should cause an interrupt, and set each implemented port's PxIE register with the appropriate enables."
+        Note: Due to the multi-tiered nature of the AHCI HBA's interrupt architecture, system software must always ensure that the PxIS (clear this first) and IS.IPS (clear this second) registers are cleared to '0' before programming the PxIE and GHC.IE registers. This will prevent any residual bits set in these registers from causing an interrupt to be asserted.
 
     4.1 Allocate memory for the CommandList, the Receive FIS buffer and SRB Extension
         Now is the time to allocate memory that will be used for controller and per request structures.
@@ -310,7 +310,7 @@ Called by:
 It performs:
     1. Clear GHC.IE
     AHCI 1.1 Section 8.3.3
-    "Software must disable interrupts (GHC.IE must be cleared to ?? prior to requesting a transition of the HBA to the D3 state.  This precaution by software avoids an interrupt storm if an interrupt occurs during the transition to the D3 state."
+    "Software must disable interrupts (GHC.IE must be cleared to '0') prior to requesting a transition of the HBA to the D3 state.  This precaution by software avoids an interrupt storm if an interrupt occurs during the transition to the D3 state."
 Affected Variables/Registers:
     GHC.IE
 Return Values:

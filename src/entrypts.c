@@ -387,7 +387,7 @@ It performs:
     4.1 Turn on IE, pending interrupts will be cleared when port starts
         This has to be done after 3.2 because we need to know the number of channels before we check each PxIS.
         Verify that none of the PxIS registers are loaded, but take no action
-        Note: Due to the multi-tiered nature of the AHCI HBA’s interrupt architecture, system software must always ensure that the PxIS (clear this first) and IS.IPS (clear this second) registers are cleared to ??before programming the PxIE and GHC.IE registers. This will prevent any residual bits set in these registers from causing an interrupt to be asserted.
+        Note: Due to the multi-tiered nature of the AHCI HBA's interrupt architecture, system software must always ensure that the PxIS (clear this first) and IS.IPS (clear this second) registers are cleared to ??before programming the PxIE and GHC.IE registers. This will prevent any residual bits set in these registers from causing an interrupt to be asserted.
         However, the interrupt handler hasn't been hooked up by StorPort yet, so no interrupts will be handled by software until that happens.
     4.2 Allocate resources for both DMA use and all Channel/Port extensions.
     4.3 Initialize ports and start them. Dump stack will do this when receiving the INQUIRY command
@@ -399,7 +399,7 @@ Affected Variables/Registers:
     AdapterExtension->Version
 
     GHC.AE, GHC.IE, GHC.HR
-    IS and all fields in the HBA’s register memory space except PxFB/PxFBU/PxCLB/PxCLBU that are not HwInit
+    IS and all fields in the HBA's register memory space except PxFB/PxFBU/PxCLB/PxCLBU that are not HwInit
 
 Return Values:
     The miniport driver returns TRUE if it successfully execute the whole function.
@@ -1409,7 +1409,7 @@ AhciHwStartIo (
     )
 /*
     1. Process Adapter request
-    2. Bail out if it’s adapter request
+    2. Bail out if it's adapter request
     3. Validate Port Number, if not valid, bail out.
     4. Process Device/Port request
 
@@ -2077,7 +2077,7 @@ Return Values:
     if (pxis.SDBS) {
         pxisMask.SDBS = 1;
     }
-    // Descriptor Processed (A PRD with the ‘I?bit set has transferred all of its data)
+    // Descriptor Processed (A PRD with the 'I'bit set has transferred all of its data)
     if (pxis.DPS) {
         pxisMask.DPS = 1;
     }
