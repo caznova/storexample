@@ -19,24 +19,94 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\common.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\entrypts.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\hbastat.c">
+    <ClCompile Include="..\pnppower.c" />
+    <ClCompile Include="..\hbastat.c" />
+    <ClCompile Include="..\util.c" />
+    <ClCompile Include="..\io.c" />
+    <ClCompile Include="..\common.c" />
+    <ClCompile Include="..\entrypts.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\io.c">
+    <ClCompile Include="..\pnppower.c" />
+    <ClCompile Include="..\hbastat.c" />
+    <ClCompile Include="..\util.c" />
+    <ClCompile Include="..\io.c" />
+    <ClCompile Include="..\common.c" />
+    <ClCompile Include="..\entrypts.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\pnppower.c">
+    <ClCompile Include="..\pnppower.c" />
+    <ClCompile Include="..\hbastat.c" />
+    <ClCompile Include="..\util.c" />
+    <ClCompile Include="..\io.c" />
+    <ClCompile Include="..\common.c" />
+    <ClCompile Include="..\entrypts.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\util.c">
+    <ClCompile Include="..\pnppower.c" />
+    <ClCompile Include="..\hbastat.c" />
+    <ClCompile Include="..\util.c" />
+    <ClCompile Include="..\io.c" />
+    <ClCompile Include="..\common.c" />
+    <ClCompile Include="..\entrypts.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\pnppower.c" />
+    <ClCompile Include="..\hbastat.c" />
+    <ClCompile Include="..\util.c" />
+    <ClCompile Include="..\io.c" />
+    <ClCompile Include="..\common.c" />
+    <ClCompile Include="..\entrypts.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pnppower.c" />
+    <ClCompile Include="..\hbastat.c" />
+    <ClCompile Include="..\util.c" />
+    <ClCompile Include="..\io.c" />
+    <ClCompile Include="..\common.c" />
+    <ClCompile Include="..\entrypts.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pnppower.c" />
+    <ClCompile Include="..\hbastat.c" />
+    <ClCompile Include="..\util.c" />
+    <ClCompile Include="..\io.c" />
+    <ClCompile Include="..\common.c" />
+    <ClCompile Include="..\entrypts.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pnppower.c" />
+    <ClCompile Include="..\hbastat.c" />
+    <ClCompile Include="..\util.c" />
+    <ClCompile Include="..\io.c" />
+    <ClCompile Include="..\common.c" />
+    <ClCompile Include="..\entrypts.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pnppower.c" />
+    <ClCompile Include="..\hbastat.c" />
+    <ClCompile Include="..\util.c" />
+    <ClCompile Include="..\io.c" />
+    <ClCompile Include="..\common.c" />
+    <ClCompile Include="..\entrypts.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pnppower.c" />
+    <ClCompile Include="..\hbastat.c" />
+    <ClCompile Include="..\util.c" />
+    <ClCompile Include="..\io.c" />
+    <ClCompile Include="..\common.c" />
+    <ClCompile Include="..\entrypts.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pnppower.c" />
+    <ClCompile Include="..\hbastat.c" />
+    <ClCompile Include="..\util.c" />
+    <ClCompile Include="..\io.c" />
+    <ClCompile Include="..\common.c" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\storahci.rc">

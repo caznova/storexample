@@ -1,26 +1,46 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 12.0
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "storahci", "src\inbox\storahci.vcxproj", "{A0F8FE2B-5512-436E-A77F-4A24EAAACA7C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InstallDriver", "InstallDriver\InstallDriver.vcxproj", "{DD73CCE0-C04A-4C5B-A75E-19AFC6CC8458}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RemoveDriver", "RemoveDriver\RemoveDriver.vcxproj", "{EB648A24-C92D-4CA5-A2A5-225989DD71AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
-		Release|Win32 = Release|Win32
 		Debug|x64 = Debug|x64
+		Release|Win32 = Release|Win32
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{A0F8FE2B-5512-436E-A77F-4A24EAAACA7C}.Debug|Win32.ActiveCfg = Debug|Win32
 		{A0F8FE2B-5512-436E-A77F-4A24EAAACA7C}.Debug|Win32.Build.0 = Debug|Win32
-		{A0F8FE2B-5512-436E-A77F-4A24EAAACA7C}.Release|Win32.ActiveCfg = Release|Win32
-		{A0F8FE2B-5512-436E-A77F-4A24EAAACA7C}.Release|Win32.Build.0 = Release|Win32
 		{A0F8FE2B-5512-436E-A77F-4A24EAAACA7C}.Debug|x64.ActiveCfg = Debug|x64
 		{A0F8FE2B-5512-436E-A77F-4A24EAAACA7C}.Debug|x64.Build.0 = Debug|x64
+		{A0F8FE2B-5512-436E-A77F-4A24EAAACA7C}.Release|Win32.ActiveCfg = Release|Win32
+		{A0F8FE2B-5512-436E-A77F-4A24EAAACA7C}.Release|Win32.Build.0 = Release|Win32
 		{A0F8FE2B-5512-436E-A77F-4A24EAAACA7C}.Release|x64.ActiveCfg = Release|x64
 		{A0F8FE2B-5512-436E-A77F-4A24EAAACA7C}.Release|x64.Build.0 = Release|x64
+		{DD73CCE0-C04A-4C5B-A75E-19AFC6CC8458}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DD73CCE0-C04A-4C5B-A75E-19AFC6CC8458}.Debug|Win32.Build.0 = Debug|Win32
+		{DD73CCE0-C04A-4C5B-A75E-19AFC6CC8458}.Debug|x64.ActiveCfg = Debug|x64
+		{DD73CCE0-C04A-4C5B-A75E-19AFC6CC8458}.Debug|x64.Build.0 = Debug|x64
+		{DD73CCE0-C04A-4C5B-A75E-19AFC6CC8458}.Release|Win32.ActiveCfg = Release|Win32
+		{DD73CCE0-C04A-4C5B-A75E-19AFC6CC8458}.Release|Win32.Build.0 = Release|Win32
+		{DD73CCE0-C04A-4C5B-A75E-19AFC6CC8458}.Release|x64.ActiveCfg = Release|x64
+		{DD73CCE0-C04A-4C5B-A75E-19AFC6CC8458}.Release|x64.Build.0 = Release|x64
+		{EB648A24-C92D-4CA5-A2A5-225989DD71AA}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EB648A24-C92D-4CA5-A2A5-225989DD71AA}.Debug|Win32.Build.0 = Debug|Win32
+		{EB648A24-C92D-4CA5-A2A5-225989DD71AA}.Debug|x64.ActiveCfg = Debug|x64
+		{EB648A24-C92D-4CA5-A2A5-225989DD71AA}.Debug|x64.Build.0 = Debug|x64
+		{EB648A24-C92D-4CA5-A2A5-225989DD71AA}.Release|Win32.ActiveCfg = Release|Win32
+		{EB648A24-C92D-4CA5-A2A5-225989DD71AA}.Release|Win32.Build.0 = Release|Win32
+		{EB648A24-C92D-4CA5-A2A5-225989DD71AA}.Release|x64.ActiveCfg = Release|x64
+		{EB648A24-C92D-4CA5-A2A5-225989DD71AA}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

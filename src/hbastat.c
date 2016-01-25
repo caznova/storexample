@@ -22,6 +22,7 @@ Revision History:
 
 #pragma warning(disable:4214) // bit field types other than int
 #pragma warning(disable:4201) // nameless struct/union
+#pragma warning(disable:4311) // PVOID-->ULONG pointer warning
 
 #include "generic.h"
 
